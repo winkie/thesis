@@ -1,6 +1,8 @@
+package vs.thesis
+
 class Diagram2 extends Diagram {
   def count() = mCount
-    /*
+  /*
   :Int = {
     if (mDimples.size == 1)
       return mDimples(0)(0)

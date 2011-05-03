@@ -1,3 +1,5 @@
+package vs.thesis
+
 import scala.util.Random
 
 class RichardsonsGenerator(N: Int, dimension: Int) {

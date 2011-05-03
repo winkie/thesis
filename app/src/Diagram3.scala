@@ -1,3 +1,5 @@
+package vs.thesis
+
 import collection.mutable.HashSet
 
 class Diagram3 extends Diagram {

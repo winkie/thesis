@@ -1,3 +1,6 @@
+package vs.thesis
+
+import java.io.{FileWriter, File, BufferedWriter}
 
 object Main {
   def run2d(): Unit = {
@@ -8,16 +11,25 @@ object Main {
     println(d.mDimples)
     println(d.count())
 
-    val G2 = new RichardsonsGenerator(10000, 2)
+    val G2 = new RichardsonsGenerator(50000, 2)
     def One(l: List[Int]): Double = {
       return 1.0
     }
 
-    for (i <- 0 to 100) {
-      val diagram = G2.generate(One)
+    //for (i <- 0 to 100) {
+      val diagram = G2.generate((l: List[Int]) => 1.0).asInstanceOf[Diagram2]
       println("" + diagram.count + "\n")
       //println(diagram.asInstanceOf[SDiagram2].mDimples)
+    //}
+
+    val bw = new BufferedWriter(new FileWriter(new File("2d.txt")));
+
+    for (d <- diagram.getDimples()) {
+      bw.write("" + math.sqrt(d(0)) + " " + math.sqrt(d(1)))
+      bw.newLine();
     }
+
+    bw.close();
   }
 
   def run3d(): Unit = {
@@ -29,17 +41,25 @@ object Main {
     println(d.getDimples())
     println(d.count())
 
-    val G3 = new RichardsonsGenerator(1000, 2)
+    val G3 = new RichardsonsGenerator(1000, 3)
     def One(l: List[Int]): Double = {
       return 1.0
     }
 
-    val diag = G3.generate(One)
+    val diag = G3.generate(One).asInstanceOf[Diagram3]
 
+    val bw = new BufferedWriter(new FileWriter(new File("3d.txt")));
+
+    for (d <- diag.getDimples()) {
+      bw.write("" + d(0) + " " + d(1) + " " + d(2))
+      bw.newLine();
+    }
+
+    bw.close();
     println(diag.count())
   }
 
   def main(args: Array[String]) {
-    run3d();
+    run2d();
   }
 }
