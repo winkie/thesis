@@ -2,7 +2,7 @@ package vs.thesis
 
 import collection.mutable.HashSet
 
-class Diagram3 extends Diagram {
+class Diagram3 extends IDiagram {
   def count() = mCount
 
   def dimension() = 3

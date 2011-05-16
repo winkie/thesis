@@ -2,19 +2,24 @@ package vs.thesis
 
 import scala.util.Random
 
-class RichardsonsGenerator(N: Int, dimension: Int) {
+class RichardsonsGenerator(N: Int, dimension: Int) extends IGenerator {
   val rnd = new Random(System.nanoTime())
 
-  private def selectDimple(probs_a: List[Double]): Int = {
-    var probs = probs_a
+  private def selectDimple(probsArgs: List[Double]): Int = {
+    var probs = probsArgs
     var total = probs.sum
+//    println("Probs: " + probs)
     probs = probs.map(_ / total)
+//    println("ProbsNorm: " + probs)
     val intervals = new Array[Double](probs.size)
     total = 0
+//    print("Intervals: (")
     for (i <- 0 to probs.size - 1) {
       total += probs(i)
       intervals(i) = total
+//      print(" " + intervals(i) + ",")
     }
+//    println(")")
 
     val x = rnd.nextDouble()
     for (i <- 0 to probs.size - 1) {
@@ -25,8 +30,8 @@ class RichardsonsGenerator(N: Int, dimension: Int) {
     throw new RuntimeException("Cannot find interval for x = " + x)
   }
 
-  def generate(distance:List[Int] => Double): Diagram = {
-    var diagram: Diagram = null
+  def generate(weight:List[Int] => Double): IDiagram = {
+    var diagram: IDiagram = null
     if (dimension == 2)
       diagram = new Diagram2
     else if (dimension == 3)
@@ -35,16 +40,17 @@ class RichardsonsGenerator(N: Int, dimension: Int) {
       throw new RuntimeException("Cannot generate non-2D diagrams");
 
     while (diagram.count() < N) {
-//      println(diagram.mDimples)
-
       val dimples = diagram.getDimples()
       var ind = -1;
+      
+//      println("Got " + dimples.size + " dimples")
+
       if (dimples.size == 1)
         ind = 0
       else
-        ind = selectDimple(dimples.map(distance))
+        ind = selectDimple(dimples.map(weight))
 
-//      println("Filling " + dimples(ind))
+//      println("Filling " + ind)
 
       diagram.fillDimple(dimples(ind))
     }

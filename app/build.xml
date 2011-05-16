@@ -1,0 +1,85 @@
+<project name="ThesisApp" basedir=".">
+  <property name="scala.home"  value="../../scala-2.8.1.final"/>
+  <property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar"/>
+
+  <property name="src.dir"     value="src"/>
+
+  <property name="build.dir"   value="build"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="jar.dir"     value="${build.dir}/jar"/>
+  <property name="lib.dir"     value="lib"/>
+
+  <property name="run-Application"  value="vs.thesis.Application"/>
+  <property name="run-Main"         value="vs.thesis.Main"/>
+  
+  
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+   
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    <pathelement location="${scala-library.jar}"/>
+  </path>
+
+  <target name="init">
+    <path id="build.classpath">
+      <path refid="classpath"/>
+      <pathelement location="${classes.dir}"/>
+    </path>
+    <taskdef resource="scala/tools/ant/antlib.xml">
+      <classpath>
+        <pathelement location="${scala.home}/lib/scala-compiler.jar"/>
+        <pathelement location="${scala-library.jar}"/>
+      </classpath>
+    </taskdef>
+  </target>
+  
+  <target name="compile" depends="init">
+    <mkdir dir="${classes.dir}"/>
+    <scalac srcdir="${src.dir}"
+            destdir="${classes.dir}"
+            classpathref="build.classpath"
+	    force="changed">
+      <include name="**/*.scala"/>
+<!--  <exclude name="forget/**/*.scala"   /> -->
+    </scalac>
+<!--
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath">
+      <include name="src/**/*.java"/>
+    </javac>
+-->
+  </target>
+
+  <target name="runA" depends="compile">
+    <java classname="${run-Application}" fork="true">
+      <sysproperty key="java.library.path" path="${lib.dir}"/>
+      <classpath>
+	<path refid="build.classpath"/>
+      </classpath>
+    </java>
+  </target>  
+<!--
+  <target name="jar" depends="compile">
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+      <manifest>
+	<attribute name="Main-Class" value="${run-Application}"/>
+      </manifest>
+    </jar>
+  </target>  
+
+  <target name="run" depends="jar">
+    <java fork="true" classname="${main-class}">
+      <classpath>
+	<path refid="classpath"/>
+	<path location="${jar.dir}/${ant.project.name}.jar"/>
+      </classpath>
+    </java>
+  </target>
+  
+  <target name="clean-build" depends="clean,jar"/>
+  
+  <target name="main" depends="clean,run"/>
+ -->  
+</project>
