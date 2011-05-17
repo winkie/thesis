@@ -7,6 +7,8 @@ class Diagram3 extends IDiagram {
 
   def dimension() = 3
 
+  def getCorners() = null
+
   def getDimples(): List[List[Int]] = {
     return mDimples.toList;
   }

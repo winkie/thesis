@@ -42,15 +42,17 @@ class D2Visualizer extends IVisualizer {
 
     val b = math.max(dimples.head(1), dimples.last(0))
     val bound = new Quad
-    bound.add(point(0, 0)); bound.add(point(0, b)); bound.add(point(b, b));  bound.add(point(b, 0))
+    bound.add(point(0, 0)); bound.add(point(0, b))
+    bound.add(point(b, b));  bound.add(point(b, 0))
     s.add(bound)
 
-    dimples.dropRight(1).zip(dimples.drop(1)).foreach((coords: (List[Double], List[Double])) => {
-      val x1 = coords._1(0); val y1 = coords._1(1)
-      val x2 = coords._2(0); val y2 = coords._2(1)
+    dimples.dropRight(1).zip(dimples.drop(1))
+      .foreach((coords: (List[Double], List[Double])) => {
+        val x1 = coords._1(0); val y1 = coords._1(1)
+        val x2 = coords._2(0); val y2 = coords._2(1)
 
-      p.add(point(x1, y1))
-      p.add(point(x2, y1))
+        p.add(point(x1, y1))
+        p.add(point(x2, y1))
     })
     p.add(point(dimples.last(0), 0))
     p.setColor(color)

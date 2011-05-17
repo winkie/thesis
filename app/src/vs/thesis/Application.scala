@@ -4,7 +4,8 @@ import java.io.{FileWriter, File, BufferedWriter}
 
 object Application {
   def visual(args: Array[String]) {
-    val func = ((l: List[Int]) => math.sqrt(math.pow(l(0), 0.16) + math.pow(l(1), 0.16)))
+    val func = ((l: List[Int]) =>
+      math.sqrt(math.pow(l(0), 0.16) + math.pow(l(1), 0.16)))
     val g = new RichardsonsGenerator(10000, 2)
     val d = g.generate(func)
 
@@ -33,7 +34,8 @@ object Application {
     val m = (new BinSearchMinimization).min(f, -10, 10, 0.0001)
     println(m)
 
-    val f2 = (x: List[Double]) => (math.pow(x(0) - 3.0, 2) + math.pow(x(1) + 2, 2))
+    val f2 = (x: List[Double]) => 
+      (math.pow(x(0) - 3.0, 2) + math.pow(x(1) + 2, 2))
 
     val mdm = new CoordDescentMinimization()
 
@@ -47,7 +49,7 @@ object Application {
 
     def dist(x: Double, y: Double): Double = {
       val (xv, yv) = (targetX(x) - y, targetX(y) - x)
-      return (xv * xv + yv * yv)
+      return math.sqrt(xv * xv + yv * yv)
     }
 
     val norm = math.sqrt(diagram2.count())
@@ -77,31 +79,16 @@ object Application {
     
     //val (alpha, beta) = (2.0, 0.16)
 
-    val weightTemplate = ((l: Double) => {
+    val weightTemplate = ((l: List[Double]) => {
       (x: List[Int]) => {
-        math.pow(math.pow(x(0), 1) + math.pow(x(1), 1), l)
+        math.pow(math.pow(x(0), l(0)) + math.pow(x(1), l(0)), l(1))
         }
       })
 
-    // val minimizator = new CoordDescentMinimization()
-    // val wf = new WeightFitting(weightTemplate, gen,
-    //                            uniformDistrDistance2D2, minimizator)
-    // val opt = wf.fit(List(0.5), 0.0001)
-
-    def minFunction(x: Double): Double = {
-      println("\t\t\tWeight func params: " + x)
-      var weight = weightTemplate(x)
-      val diags = List.fill(15) {gen.generate(weight)}
-      
-      val meanDistance = diags.map(uniformDistrDistance2D2)
-                              .foldLeft(0.0)(_ + _) / diags.size
-      
-      println("Mean dist = " + meanDistance)
-      return meanDistance
-    }
-
-    val minimizator = new GoldenRatioMinimization()
-    val opt = minimizator.min(minFunction, 0.001, 0.5, 0.0001)
+    val minimizer = new CoordDescentMinimization()
+    val wf = new WeightFitting(weightTemplate, gen,
+                               uniformDistrDistance2D, minimizer)
+    val opt = wf.fit(List(2.0, 0.5), 0.01, List((0.1, 3.0), (0.001, 0.5)))
 
     println(opt)
   }
@@ -111,7 +98,10 @@ object Application {
     //val (a, b) = (1.16, 0.45)
     //val (a, b) = (0.982, 0.380)
     //val (a, b) = (2.0, 0.192)
-    val (a, b) = (1.0, 0.453)
+    //val (a, b) = (1.0, 0.453)
+    //val (a, b) = (2.029, 0.209)
+    val (a, b) = (1.307, 0.303)
+    //val (a, b) = (2.0, 0.16)
     val f = (l: List[Int]) =>
       math.pow(math.pow(l(0), a) + math.pow(l(1), a), b)
     val f2 = (l: List[Int]) => 1.0
@@ -123,7 +113,8 @@ object Application {
     val bw = new BufferedWriter(new FileWriter(new File("2d4.txt")));
 
     for (cor <- d.getCorners()) {
-      bw.write("" + math.exp(-c * (cor(0) / norm)) + " " + math.exp(-c * (cor(1) / norm)))
+      bw.write("" + math.exp(-c * (cor(0) / norm)) + 
+               " " + math.exp(-c * (cor(1) / norm)))
       bw.newLine();
     }
 

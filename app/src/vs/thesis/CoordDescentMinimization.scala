@@ -11,7 +11,8 @@ class CoordDescentMinimization extends IMultiDimMinimization {
     return a.zip(b).map((p: (Double, Double)) => (p._1 + alpha * p._2))
   }
 
-  override def min(f: (Vec => Double), start: Vec, eps: Double): Vec = {
+  override def min(f: (Vec => Double), start: Vec, eps: Double,
+                   bounds: List[(Double, Double)] = null): Vec = {
     val oneDimMinimizer = new GoldenRatioMinimization()
 
     val n = start.length
@@ -25,12 +26,19 @@ class CoordDescentMinimization extends IMultiDimMinimization {
       val dir = zeros.toList
       zeros(i) = 0.0
 
-      //Only positive range mod
-      val alphaMin = -x(i) + 0.001
-      val alphaMax = math.abs(alphaMin) * 2.0
+      var alphas: (Double, Double) = null
+
+      if (bounds != null) {
+        assert(bounds.size == n)
+        val bi = bounds(i)
+        assert(bi._2 >= bi._1)
+        alphas = (bi._1 - x(i), bi._2 - x(i))
+      } else {
+        println("WARNING: Unconstrained minimization!")
+      }
 
       val alpha = oneDimMinimizer.min((_alpha: Double) => 
-	f(step(x, dir, _alpha)), alphaMin, alphaMax, 0.0001)
+        f(step(x, dir, _alpha)), alphas._1, alphas._2, eps * eps * 0.1)
       
       xPrev = x
       x = step(x, dir, alpha)

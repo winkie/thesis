@@ -1,22 +1,7 @@
 package vs.thesis
 
-
 class Diagram2 extends IDiagram {
   override def count() = mCount
-  /*
-  :Int = {
-    if (mDimples.size == 1)
-      return mDimples(0)(0)
-
-    var count: Int = 0
-    for (i <- mDimples.size - 1 to 1) {
-      val d1 = mDimples(i)
-      val d2 = mDimples(i - 1)
-      count += (d1(1) - d2(1)) * d2(0)
-    }
-    return count
-  }
-  */
   override def dimension() = 2
 
   override def getDimples(): List[List[Int]] = {
@@ -41,13 +26,14 @@ class Diagram2 extends IDiagram {
 
     //println(mDimples)
 
-    mDimples.dropRight(1).zip(mDimples.drop(1)).foreach((ll: (List[Int], List[Int])) => {
-      val (y1, y2) = (ll._1(1), ll._2(1))
-      val h = y2 - y1
-      for (i <- 0 until h) {
-        partition = partition ::: List(ll._1(0))
-      }
-    })
+    mDimples.dropRight(1).zip(mDimples.drop(1))
+      .foreach((ll: (List[Int], List[Int])) => {
+        val (y1, y2) = (ll._1(1), ll._2(1))
+        val h = y2 - y1
+        for (i <- 0 until h) {
+          partition = partition ::: List(ll._1(0))
+        }
+      })
 
     return partition
   }
