@@ -12,13 +12,13 @@ object Main {
     println(d.mDimples)
     println(d.count())
 
-    val G2 = new RichardsonsGenerator(50000, 2)
+    val G2 = new RichardsonsGenerator(2)
     def One(l: List[Int]): Double = {
       return 1.0
     }
 
     //for (i <- 0 to 100) {
-      val diagram = G2.generate((l: List[Int]) => 1.0).asInstanceOf[Diagram2]
+      val diagram = G2.generate((l: List[Int]) => 1.0, 50000).asInstanceOf[Diagram2]
       println("" + diagram.count + "\n")
       //println(diagram.asInstanceOf[SDiagram2].mDimples)
     //}
@@ -42,12 +42,12 @@ object Main {
     println(d.getDimples())
     println(d.count())
 
-    val G3 = new RichardsonsGenerator(1000, 3)
+    val G3 = new RichardsonsGenerator(3)
     def One(l: List[Int]): Double = {
       return 1.0
     }
 
-    val diag = G3.generate(One).asInstanceOf[Diagram3]
+    val diag = G3.generate(One, 1000).asInstanceOf[Diagram3]
 
     val bw = new BufferedWriter(new FileWriter(new File("3d.txt")));
 

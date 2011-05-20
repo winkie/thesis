@@ -95,7 +95,8 @@ object Diagram2 {
 
     return diagram2.getCorners()
       .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
-      .foldLeft(0.0)(_ + _)
+      .max
+      //.foldLeft(0.0)(_ + _)
   }
 
   def distanceToUniform2(diagram: IDiagram): Double = {
@@ -110,6 +111,7 @@ object Diagram2 {
 
     return diagram2.getCorners()
       .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
-      .foldLeft(0.0)(_ + _)
+      .max
+      //.foldLeft(0.0)(_ + _)
   }
 }

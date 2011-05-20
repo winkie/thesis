@@ -7,6 +7,7 @@ import org.jzy3d.maths.Coord3d
 import org.jzy3d.colors.Color
 import org.jzy3d.plot3d.primitives.{Polygon, Point, Quad}
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode
+import vs.thesis.IDiagram
 
 class D2Visualizer extends IVisualizer {
   val frm = new JFrame("IDiagram")
@@ -58,6 +59,8 @@ class D2Visualizer extends IVisualizer {
     p.setColor(color)
     s.add(p)
 
+    //chart.getAxeLayout.setXAxeLabel("X")
+    //chart.getAxeLayout.setYAxeLabel("Y")
     //chart.getScene.setGraph(s.getGraph())
 
     frm.add(chart.getCanvas().asInstanceOf[JComponent])

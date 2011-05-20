@@ -10,14 +10,14 @@ class Diagram3 extends IDiagram {
   def getCorners() = null
 
   def getDimples(): List[List[Int]] = {
-    return mDimples.toList;
+    return mDimples.toList
   }
 
   private def block(b: List[Int]): Boolean = {
     if (b(0) < 0 || b(1) < 0 || b(2) < 0)
-      return true;
+      return true
 
-    return mBlocks.contains(b);
+    return mBlocks.contains(b)
   }
 
   def fillDimple(dimple: List[Int]): Unit = {

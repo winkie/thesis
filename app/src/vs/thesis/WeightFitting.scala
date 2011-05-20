@@ -2,7 +2,8 @@ package vs.thesis
 
 import minimization.IMultiDimSearch
 
-class WeightFitting(weightTemplate: List[Double] => (List[Int] => Double),
+class WeightFitting(size: Int,
+                    weightTemplate: List[Double] => (List[Int] => Double),
                     generator: IGenerator,
                     distance: IDiagram => Double,
                     minimizator: IMultiDimSearch) {
@@ -10,7 +11,7 @@ class WeightFitting(weightTemplate: List[Double] => (List[Int] => Double),
   private def minFunction(x: List[Double]): Double = {
     println("\t\t\tWeight func params: " + x)
     val weight = weightTemplate(x)
-    val diags = List.fill(20) {generator.generate(weight)}
+    val diags = List.fill(20) {generator.generate(weight, size)}
 
     val meanDistance = diags.map(distance).foldLeft(0.0)(_ + _) / diags.size
 

@@ -3,6 +3,7 @@ package vs.thesis
 import java.math.BigInteger
 
 trait IDiagramEnumerator {
+  def count(n: Int): BigInt
   def diagramToNumber(diagram: IDiagram): BigInt
   def numberToDiagram(number: BigInt): IDiagram
 }
@@ -47,10 +48,12 @@ class Simple2DEnumerator(count: Int) extends IDiagramEnumerator {
     return arr(n)(x);
   }
 
+  def count(n: Int) = PP(n, n)
+
   def diagramToNumber(diagram: IDiagram): BigInt = {
     val diagram2 = diagram.asInstanceOf[Diagram2]
     val partition = diagram2.getPartition()
-    println(partition)
+    //println(partition)
 
     var s = partition.sum
 

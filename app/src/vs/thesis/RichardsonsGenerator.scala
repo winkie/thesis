@@ -2,7 +2,7 @@ package vs.thesis
 
 import scala.util.Random
 
-class RichardsonsGenerator(N: Int, dimension: Int) extends IGenerator {
+class RichardsonsGenerator(dim: Int) extends IGenerator {
   val rnd = new Random(System.nanoTime())
 
   private def selectDimple(probsArgs: List[Double]): Int = {
@@ -30,16 +30,16 @@ class RichardsonsGenerator(N: Int, dimension: Int) extends IGenerator {
     throw new RuntimeException("Cannot find interval for x = " + x)
   }
 
-  def generate(weight:List[Int] => Double): IDiagram = {
+  def generate(weight:List[Int] => Double, size: Int): IDiagram = {
     var diagram: IDiagram = null
-    if (dimension == 2)
+    if (dim == 2)
       diagram = new Diagram2
-    else if (dimension == 3)
+    else if (dim == 3)
       diagram = new Diagram3
     else
       throw new RuntimeException("Cannot generate non-2D diagrams");
 
-    while (diagram.count() < N) {
+    while (diagram.count() < size) {
       val dimples = diagram.getDimples()
       var ind = -1;
       

@@ -4,13 +4,21 @@ import java.io.{FileWriter, File, BufferedWriter}
 import vs.thesis._
 import minimization._
 import visualization._
+import javax.swing.{JButton, JFrame}
+import java.awt.event.{ActionListener, ActionEvent}
+import java.awt.Event
 
 object Application {
+  implicit def actionPerformedWrapper(func: (ActionEvent) => Unit) =
+       new ActionListener { def actionPerformed(e:ActionEvent) = func(e) }
+
   def visual(args: Array[String]) {
     val func = ((l: List[Int]) =>
       math.sqrt(math.pow(l(0), 0.16) + math.pow(l(1), 0.16)))
-    val g = new RichardsonsGenerator(10000, 2)
-    val d = g.generate(func)
+
+    val N = 10000;
+    val g = new RichardsonsGenerator(2)
+    val d = g.generate(func, N)
 
     val v = new D2Visualizer()
     //v.show(d)
@@ -46,7 +54,7 @@ object Application {
   }
 
   def testOptimum() {
-    val gen = new RichardsonsGenerator(5000, 2)
+    val gen = new RichardsonsGenerator(2)
     //val (a, b) = (1.16, 0.45)
     //val (a, b) = (0.982, 0.380)
     //val (a, b) = (2.0, 0.192)
@@ -54,15 +62,17 @@ object Application {
     //val (a, b) = (2.029, 0.209)
     val (a, b) = (1.307, 0.303)
     //val (a, b) = (2.0, 0.16)
+    //val (a, b) = (2.0, 0.13)
+
     val f = (l: List[Int]) =>
       math.pow(math.pow(l(0), a) + math.pow(l(1), a), b)
     val f2 = (l: List[Int]) => 1.0
-    val d = gen.generate(f)
+    val d = gen.generate(f, 5000)
 
     val c = math.Pi / math.sqrt(6)
     val norm = math.sqrt(d.count())
 
-    val bw = new BufferedWriter(new FileWriter(new File("2d4.txt")));
+    val bw = new BufferedWriter(new FileWriter(new File("2d6.txt")));
 
     for (cor <- d.getCorners()) {
       bw.write("" + math.exp(-c * (cor(0) / norm)) +
@@ -77,6 +87,29 @@ object Application {
     (new D2Visualizer()).show(d)
   }
 
+  def visual3D() {
+    val generator = new RichardsonsGenerator(3)
+    val weight = (x: List[Int]) => 1.0
+    val d = generator.generate(weight, 1000)
+
+    val v = new D3Visualizer()
+    v.show(d)
+  }
+
+  def gui() {
+    val frm = new JFrame("Generator")
+    val btn2d = new JButton("Generate 2D")
+    val btn3d = new JButton("Generate 3D")
+
+    val generator2 = new RichardsonsGenerator(2)
+    val generator3 = new RichardsonsGenerator(3)
+    val weight = (x: List[Int]) => (1.0)
+
+//    btn2d.addActionListener((e: Event) => {
+//
+//    })
+  }
+
   def main(args: Array[String]) = {
     //val d = new Diagram2
     //d.fillDimple(List(0, 0))
@@ -85,6 +118,7 @@ object Application {
     //d.fillDimple(List(2, 0))
     //d.fillDimple(List(3, 0))
 
+    //visual3D()
     //visual(args)
     testOptimum()
   }
