@@ -1,6 +1,6 @@
-package vs.thesis
+package vs.thesis.minimization
 
-trait IOneDimMinimization {
+trait IOneDimSearch {
   def min(f: (Double => Double),
 	  right: Double, left: Double,
 	  eps: Double): Double

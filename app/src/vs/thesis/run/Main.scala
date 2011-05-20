@@ -1,5 +1,6 @@
-package vs.thesis
+package vs.thesis.run
 
+import vs.thesis._
 import java.io.{FileWriter, File, BufferedWriter}
 
 object Main {

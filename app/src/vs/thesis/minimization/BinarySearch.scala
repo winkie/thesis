@@ -1,7 +1,7 @@
-package vs.thesis
+package vs.thesis.minimization
 
-class BinSearchMinimization(delta: Double = 0.00001) 
-                            extends IOneDimMinimization {
+class BinarySearch(delta: Double = 0.00001)
+                            extends IOneDimSearch {
   override def min(f: (Double => Double),
                    left: Double, right: Double,
                    eps: Double): Double = {

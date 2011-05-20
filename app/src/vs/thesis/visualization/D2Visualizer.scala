@@ -1,4 +1,4 @@
-package vs.thesis
+package vs.thesis.visualization
 
 import org.jzy3d.chart.Chart
 import javax.swing.{JComponent, JFrame}

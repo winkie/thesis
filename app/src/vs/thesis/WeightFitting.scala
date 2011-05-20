@@ -1,9 +1,11 @@
 package vs.thesis
 
+import minimization.IMultiDimSearch
+
 class WeightFitting(weightTemplate: List[Double] => (List[Int] => Double),
                     generator: IGenerator,
                     distance: IDiagram => Double,
-                    minimizator: IMultiDimMinimization) {
+                    minimizator: IMultiDimSearch) {
 
   private def minFunction(x: List[Double]): Double = {
     println("\t\t\tWeight func params: " + x)
@@ -22,3 +24,4 @@ class WeightFitting(weightTemplate: List[Double] => (List[Int] => Double),
     return minimizator.min(minFunction, start, eps, bounds)
   }
 }
+

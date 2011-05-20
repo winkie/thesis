@@ -80,4 +80,36 @@ object Diagram2 {
 
     return d
   }
+
+  def distanceToUniform(diagram: IDiagram): Double = {
+    val diagram2 = diagram.asInstanceOf[Diagram2]
+    val c = math.Pi / math.sqrt(6)
+    val targetX = (x: Double) => -math.log((1 - math.exp(-c * x))) / c
+
+    def dist(x: Double, y: Double): Double = {
+      val (xv, yv) = (targetX(x) - y, targetX(y) - x)
+      return math.sqrt(xv * xv + yv * yv)
+    }
+
+    val norm = math.sqrt(diagram2.count())
+
+    return diagram2.getCorners()
+      .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
+      .foldLeft(0.0)(_ + _)
+  }
+
+  def distanceToUniform2(diagram: IDiagram): Double = {
+    val diagram2 = diagram.asInstanceOf[Diagram2]
+    val c = math.Pi / math.sqrt(6)
+    val norm = math.sqrt(diagram2.count())
+
+    def dist(x: Double, y: Double): Double = {
+      val (lx, ly) = (math.exp(-c * x), math.exp(-c * y))
+      return math.abs(lx + ly - 1) / math.sqrt(2)
+    }
+
+    return diagram2.getCorners()
+      .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
+      .foldLeft(0.0)(_ + _)
+  }
 }

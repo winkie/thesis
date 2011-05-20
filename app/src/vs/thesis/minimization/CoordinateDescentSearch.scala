@@ -1,6 +1,8 @@
-package vs.thesis
+package vs.thesis.minimization
 
-class CoordDescentMinimization extends IMultiDimMinimization {
+class CoordinateDescentSearch(oneDimMinimizer: IOneDimSearch = 
+                              new GoldenSectionSearch())
+                              extends IMultiDimSearch {
 
   def norm2(a: Vec, b: Vec): Double = {
     return a.zip(b).map((p: (Double, Double)) => 
@@ -13,7 +15,7 @@ class CoordDescentMinimization extends IMultiDimMinimization {
 
   override def min(f: (Vec => Double), start: Vec, eps: Double,
                    bounds: List[(Double, Double)] = null): Vec = {
-    val oneDimMinimizer = new GoldenRatioMinimization()
+    val oneDimMinimizer = new GoldenSectionSearch()
 
     val n = start.length
     val zeros = Array.fill(n){0.0}

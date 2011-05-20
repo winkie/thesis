@@ -1,6 +1,6 @@
-package vs.thesis
+package vs.thesis.minimization
 
-class GoldenRatioMinimization extends IOneDimMinimization {
+class GoldenSectionSearch extends IOneDimSearch {
   val phi = 0.5 * (math.sqrt(5) - 1)
 
   override def min(f: (Double => Double),
