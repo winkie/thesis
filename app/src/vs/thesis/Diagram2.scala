@@ -67,16 +67,16 @@ class Diagram2 extends IDiagram {
 
 object Diagram2 {
   def apply(partition: List[Int]): Diagram2 = {
-    partition.sortWith(_ > _)
+    val ps = partition.sortWith(_ > _)
     val d = new Diagram2
-    d.mCount = partition.sum
+    d.mCount = ps.sum
 
-    d.mDimples = List(List(partition(0), 0))
-    for (i <- 1 until partition.size) {
-      if (partition(i) != partition(i - 1))
-        d.mDimples = d.mDimples ::: List(List(partition(i), i))
+    d.mDimples = List(List(ps(0), 0))
+    for (i <- 1 until ps.size) {
+      if (ps(i) != ps(i - 1))
+        d.mDimples = d.mDimples ::: List(List(ps(i), i))
     }
-    d.mDimples = d.mDimples ::: List(List(0, partition.size))
+    d.mDimples = d.mDimples ::: List(List(0, ps.size))
 
     return d
   }
@@ -111,7 +111,22 @@ object Diagram2 {
 
     return diagram2.getCorners()
       .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
-      .max
-      //.foldLeft(0.0)(_ + _)
+      .foldLeft(0.0)(_ + _) / diagram2.getCorners().size
+  }
+
+  def distanceToUniform3(diagram: IDiagram): Double = {
+    val diagram2 = diagram.asInstanceOf[Diagram2]
+    val c = math.Pi / math.sqrt(6)
+    val norm = math.sqrt(diagram2.count())
+
+    def dist(x: Double, y: Double): Double = {
+      val (lx, ly) = (math.exp(-c * x), math.exp(-c * y))
+      return math.abs(lx + ly - 1) / math.sqrt(2)
+    }
+
+    val d = diagram2.getCorners()
+      .map((l: List[Int]) => dist(l(0) / norm, l(1) / norm))
+      .foldLeft(0.0)(math.pow(_, 2.0) + _) / diagram2.getCorners().size
+    return math.sqrt(d)
   }
 }

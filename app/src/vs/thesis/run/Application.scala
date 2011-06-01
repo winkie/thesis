@@ -53,6 +53,25 @@ object Application {
     println(mdm.min(f2, List(-1110.0, 1000.0), 0.0001))
   }
 
+  def meanDiagram2(l: List[Diagram2]): List[(Int, Double)] = {
+    val dl = l.map(_.getDimples())
+    val maxX = dl.map(_.map((l: List[Int]) => l(0)).max).max
+
+    var arr = Array.fill(maxX + 1){Array(0, 0)}
+
+    dl.foreach(_.foreach((l: List[Int]) => {
+      arr(l(0))(0) += l(1)
+      arr(l(0))(1) += 1
+    }))
+
+    var res = List[(Int, Double)]()
+    for (i <- 0 to maxX) {
+      if (arr(i)(0) != 0)
+        res = res ::: List((i, arr(i)(0) * 1.0 / arr(i)(1)))
+    }
+    return res
+  }
+
   def testOptimum() {
     val gen = new RichardsonsGenerator(2)
     //val (a, b) = (1.16, 0.45)
@@ -60,23 +79,26 @@ object Application {
     //val (a, b) = (2.0, 0.192)
     //val (a, b) = (1.0, 0.453)
     //val (a, b) = (2.029, 0.209)
-    val (a, b) = (1.307, 0.303)
-    //val (a, b) = (2.0, 0.16)
+    //val (a, b) = (1.307, 0.303)
+    val (a, b) = (2.0, 0.16)
     //val (a, b) = (2.0, 0.13)
 
     val f = (l: List[Int]) =>
       math.pow(math.pow(l(0), a) + math.pow(l(1), a), b)
     val f2 = (l: List[Int]) => 1.0
-    val d = gen.generate(f, 5000)
+    val d = gen.generate(f, 10000)
+
+    val arr = List.fill(100) {gen.generate(f, 10000).asInstanceOf[Diagram2]}
+    val mean = meanDiagram2(arr)
 
     val c = math.Pi / math.sqrt(6)
     val norm = math.sqrt(d.count())
 
-    val bw = new BufferedWriter(new FileWriter(new File("2d6.txt")));
+    val bw = new BufferedWriter(new FileWriter(new File("2d100.txt")));
 
-    for (cor <- d.getCorners()) {
-      bw.write("" + math.exp(-c * (cor(0) / norm)) +
-               " " + math.exp(-c * (cor(1) / norm)))
+    for (cor <- mean) { //d.getCorners()) {
+      bw.write("" + math.exp(-c * (cor._1 / norm)) +
+               " " + math.exp(-c * (cor._2 / norm)))
       bw.newLine();
     }
 
@@ -110,6 +132,44 @@ object Application {
 //    })
   }
 
+  def weightPlot() {
+    val f = (a:Double, b: Double) =>
+      (l: List[Int]) => math.pow(math.pow(l(0), a) + math.pow(l(1), a), b)
+
+    val gen = new RichardsonsGenerator(2)
+
+    val N = 1000
+    val (al, ar) = (0.01, 2.0)
+    val (bl, br) = (0.01, 1.0)
+
+    val bf = new BruteForceSolver(1000)
+    val m = bf.min((l: List[Double]) => (l(0)*l(0) + l(1)*l(1)), List(0.0, 0.0),
+                   0.001, List((-10.0, 10.0), (-5.0, 5.0)))
+    println(m)
+
+    throw new RuntimeException("stop")
+
+    val bw = new BufferedWriter(new FileWriter(new File("weightPlot.txt")));
+
+    //bw.write("0 ");
+    //for (j <- bl until br by 0.01) {
+    //  bw.write("" + j + " ")
+    //}
+    //bw.write("\n");
+
+    for (i <- al until ar by 0.1) {
+      for (j <- bl until br by 0.05) {
+        println((i, j))
+        val diag = gen.generate(f(i, j), N)
+        val dist = Diagram2.distanceToUniform3(diag)
+
+        println(dist)
+        bw.write("" + i +  " " + j + " " + dist + "\n")
+      }
+    }
+    bw.close();
+  }
+
   def main(args: Array[String]) = {
     //val d = new Diagram2
     //d.fillDimple(List(0, 0))
@@ -121,5 +181,6 @@ object Application {
     //visual3D()
     //visual(args)
     testOptimum()
+    //weightPlot()
   }
 }
